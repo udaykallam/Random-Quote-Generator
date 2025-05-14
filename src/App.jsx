@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [quote, setQuote] = useState('');
+  const [author, setAuthor] = useState('');
+
+  const getQuote = async () => {
+    try {
+      const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://zenquotes.io/api/random'));
+      const data = await res.json();
+      const quoteObj = JSON.parse(data.contents)[0];
+      setQuote(quoteObj.q);
+      setAuthor(quoteObj.a);
+    } catch (err) {
+      console.error("Error fetching quote:", err);
+    }
+  };
+  
+  
+
+  useEffect(() => {
+    getQuote();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={styles.container}>
+      <div style={styles.quoteBox}>
+        <p style={styles.quote}>"{quote}"</p>
+        <p style={styles.author}>— {author}</p>
+        <button onClick={getQuote} style={styles.button}>New Quote</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+const styles = {
+  container: {
+    minHeight: '100vh',
+    backgroundColor: '#f5f5f5',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  quoteBox: {
+    backgroundColor: '#fff',
+    padding: '2rem',
+    borderRadius: '10px',
+    maxWidth: '600px',
+    textAlign: 'center',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)'
+  },
+  quote: {
+    fontSize: '1.5rem',
+    fontStyle: 'italic'
+  },
+  author: {
+    marginTop: '1rem',
+    fontSize: '1rem',
+    color: '#555'
+  },
+  button: {
+    marginTop: '1.5rem',
+    padding: '0.5rem 1.5rem',
+    fontSize: '1rem',
+    cursor: 'pointer'
+  }
+};
+
+export default App;
