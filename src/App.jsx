@@ -4,8 +4,6 @@ const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(urlT
 
 const res = await fetch(proxyUrl);
 const data = await res.json();
-// process data ...
-
 
 function App() {
   const [quote, setQuote] = useState('');
@@ -17,7 +15,7 @@ function App() {
   });
 
 const getQuote = async () => {
-  setLoading(true); // Start loading
+  setLoading(true); 
   try {
     const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=https://zenquotes.io/api/random?t=${Date.now()}`;
     const res = await fetch(proxyUrl);
@@ -27,7 +25,7 @@ const getQuote = async () => {
   } catch (err) {
     console.error('Error fetching quote:', err);
   } finally {
-    setLoading(false); // Stop loading
+    setLoading(false); 
   }
 };
 
