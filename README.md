@@ -27,6 +27,7 @@ git clone https://github.com/udaykallam/Random-Quote-Generator.git
 cd Random-Quote-Generator
 npm install
 npm run dev
+```
 
 ## 🧠 How It Works
 
