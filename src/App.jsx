@@ -12,22 +12,22 @@ function App() {
   const [author, setAuthor] = useState('');
   const [loading, setLoading] = useState(false);
   const [favorites, setFavorites] = useState(() => {
-    // Load favorites from localStorage on initial render
     const saved = localStorage.getItem('favoriteQuotes');
     return saved ? JSON.parse(saved) : [];
   });
 
 const getQuote = async () => {
+  setLoading(true); // Start loading
   try {
-    const urlToFetch = `https://zenquotes.io/api/random?t=${new Date().getTime()}`;
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlToFetch)}`;
-
+    const proxyUrl = `https://api.codetabs.com/v1/proxy/?quest=https://zenquotes.io/api/random?t=${Date.now()}`;
     const res = await fetch(proxyUrl);
     const data = await res.json();
     setQuote(data[0].q);
     setAuthor(data[0].a);
   } catch (err) {
     console.error('Error fetching quote:', err);
+  } finally {
+    setLoading(false); // Stop loading
   }
 };
 
@@ -37,13 +37,11 @@ const getQuote = async () => {
     getQuote();
   }, []);
 
-  // Save favorites to localStorage whenever favorites change
   useEffect(() => {
     localStorage.setItem('favoriteQuotes', JSON.stringify(favorites));
   }, [favorites]);
 
   const saveFavorite = () => {
-    // Avoid duplicates
     const exists = favorites.some(
       (item) => item.quote === quote && item.author === author
     );
@@ -51,6 +49,12 @@ const getQuote = async () => {
       setFavorites([...favorites, { quote, author }]);
     }
   };
+
+  const deleteFavorite = (indexToDelete) => {
+  const updatedFavorites = favorites.filter((_, index) => index !== indexToDelete);
+  setFavorites(updatedFavorites);
+};
+
 
   const shareOnTwitter = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
@@ -92,20 +96,31 @@ const getQuote = async () => {
         </div>
       </div>
 
-      {/* Favorites List */}
-      {favorites.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-xl p-6 mt-8 max-w-xl w-full">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Your Favorites</h2>
-          <ul className="space-y-4 max-h-64 overflow-auto">
-            {favorites.map(({ quote, author }, index) => (
-              <li key={index} className="border-l-4 border-green-600 pl-4">
-                <p className="italic text-gray-700">"{quote}"</p>
-                <p className="text-sm text-gray-600">— {author}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+     {favorites.length > 0 && (
+  <div className="bg-white rounded-2xl shadow-xl p-6 mt-8 max-w-xl w-full">
+    <h2 className="text-xl font-semibold mb-4 text-gray-800">Your Favorites</h2>
+    <ul className="space-y-4 max-h-64 overflow-auto">
+      {favorites.map(({ quote, author }, index) => (
+        <li
+          key={index}
+          className="border-l-4 border-green-600 pl-4 flex justify-between items-start gap-2"
+        >
+          <div>
+            <p className="italic text-gray-700">"{quote}"</p>
+            <p className="text-sm text-gray-600">— {author}</p>
+          </div>
+          <button
+            onClick={() => deleteFavorite(index)}
+            className="text-red-500 hover:text-red-700 transition-all"
+            title="Delete"
+          >
+            ✖
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
     </div>
   );
 }
