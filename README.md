@@ -27,3 +27,19 @@ git clone https://github.com/udaykallam/Random-Quote-Generator.git
 cd Random-Quote-Generator
 npm install
 npm run dev
+
+## 🧠 How It Works
+
+- On initial render, the app fetches a random quote using a proxy server to bypass CORS restrictions.
+- The fetched quote and author are stored in the component state.
+- Users can generate a new quote by clicking the **"New Quote"** button.
+- Favorite quotes can be saved locally, and they persist across sessions using **localStorage**.
+
+## ⚙️ Environment Notes
+
+If you encounter an error like:  
+`"Too many requests. Obtain an auth key..."`, you can:
+
+- 🔑 Register for an API key at [zenquotes.io](https://zenquotes.io)
+- 🛡️ Replace the public proxy with your own backend proxy to avoid rate limits.
+- 🧠 Implement caching to reduce the number of API calls and improve performance.
