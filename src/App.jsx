@@ -1,9 +1,4 @@
 import { useEffect, useState } from 'react';
-const urlToFetch = 'https://zenquotes.io/api/random?t=' + new Date().getTime();
-const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(urlToFetch);
-
-const res = await fetch(proxyUrl);
-const data = await res.json();
 
 function App() {
   const [quote, setQuote] = useState('');
