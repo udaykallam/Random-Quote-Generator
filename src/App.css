@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+  cursor: url('/gethsemaneNormal.cur') 16 16, auto;
+}
+
+button:hover {
+  cursor: url('/gethsemaneLink.ani') 4 4, pointer;
+}
